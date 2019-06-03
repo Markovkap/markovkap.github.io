@@ -30,7 +30,7 @@ var drawScore = function () {
 };
 var gameOver = function () {
     clearInterval(intervalId);
-    ctx.font = "60px Comic Sans MS";
+    ctx.font = "50px Comic Sans MS";
     ctx.fillStyle = "Black";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
