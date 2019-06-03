@@ -1,11 +1,16 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var blockSize = 10;
-var width, height, gg, k;
+var width, height, gg, k, f;
 if (window.innerWidth > 1400) {
     k = 0.8;
 } else {
     k = 0.96;
+}
+if (window.innerWidth > 1000) {
+    f = 60;
+} else {
+    f = 30;
 }
 width = canvas.width = Math.floor(window.innerWidth / blockSize * k) * blockSize;
 height = canvas.height = Math.floor(window.innerHeight / blockSize * k) * blockSize;
@@ -30,7 +35,7 @@ var drawScore = function () {
 };
 var gameOver = function () {
     clearInterval(intervalId);
-    ctx.font = "20px Comic Sans MS";
+    ctx.font = f+"px Comic Sans MS";
     ctx.fillStyle = "Black";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
