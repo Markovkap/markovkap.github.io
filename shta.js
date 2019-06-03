@@ -170,3 +170,6 @@ $("body").keydown(function (event) {
         snake.setDirection(newDirection);
     }
 });
+$("button").on("click touch",function(){
+    snake.setDirection($(this).data('direction'));
+});
