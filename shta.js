@@ -1,5 +1,6 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+var gg = 0;
 var blockSize = 10;
 var width, height, gg, k, f;
 if (window.innerWidth > 1400) {
@@ -35,7 +36,7 @@ var drawScore = function () {
 };
 var gameOver = function () {
     clearInterval(intervalId);
-    ctx.font = f+"px Comic Sans MS";
+    ctx.font = f + "px Comic Sans MS";
     ctx.fillStyle = "Black";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -102,7 +103,12 @@ Snake.prototype.move = function () {
     }
     this.segments.unshift(newHead);
     if (newHead.equal(apple.position)) {
-        score++;
+        if (gg > 2) {
+            score = score + 5;
+        } else {
+            score++;
+        }
+        gg = Math.round(Math.random() * 3);
         time = time - 100;
         apple.move();
     } else {
@@ -137,20 +143,18 @@ Snake.prototype.setDirection = function (newDirection) {
     this.nextDirection = newDirection;
 };
 var Apple = function () {
-    this.position = new Block(10, 10);
+    this.position = new Block(3, 3);
 };
 Apple.prototype.draw = function () {
-    // if(gg==1 || gg==0){
-    this.position.drawCircle("LimeGreen");
-    // }
-    // if(gg==2){
-    // this.position.drawCircle("Red");
-    // }
+    if (gg > 2) {
+        this.position.drawCircle("color");
+    } else {
+        this.position.drawCircle("green");
+    }
 };
 Apple.prototype.move = function () {
     var randomCol = Math.floor(Math.random() * (widthInBlocks - 2)) + 1;
     var randomRow = Math.floor(Math.random() * (heightInBlocks - 2)) + 1;
-    // gg = Math.floor(Math.random() * 2);
     this.position = new Block(randomCol, randomRow);
 };
 var snake = new Snake();
@@ -175,6 +179,6 @@ $("body").keydown(function (event) {
         snake.setDirection(newDirection);
     }
 });
-$("button").on("click touch",function(){
+$("button").on("click touch", function () {
     snake.setDirection($(this).data('direction'));
 });
