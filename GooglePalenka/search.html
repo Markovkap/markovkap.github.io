@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>Search</title>
+        <link rel="stylesheet" href="modal.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
+        <style type="text/css">
+        .abc {
+            border-radius: 10px;
+            border-style: solid;
+        }
+        
+        .wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .links {
+            margin: auto;
+        }
+        
+        #poisk {
+            margin-top: 15px;
+        }
+        
+        #n {
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+            cursor: pointer;
+        }
+        </style>
+</head>
+
+<body>
+        <script>document.body.style.backgroundColor = localStorage.getItem('bgcolor') || "#ffffff";</script>
+    <div id="n" data-micromodal-trigger="modal-1"><img src="n.png" width="70" height="60"></div>
+    <div class="wrapper">
+        <div><img id="map" width="600" height="200" src="search.png"></div>
+        <div><input style="text-align: center; outline: none; line-height: 20px" type="search" id="gg" class="abc"
+            size="80%" maxlength="100" tabindex="2" placeholder="Введите что бы вы хотели найти"></div>
+            <button id="poisk" onclick="Search()"><img id="map" width="50" height="50" src="g.png"></button>
+            <table class="links" cellspacing="30">
+                <tr>
+                    <td><a href="https://youtube.com"><img id="map" width="60" height="60" src="youtube.png"></a></td>
+                    <td><a href="https://telegram.org/"><img id="map" width="60" height="60" src="telegram.jpg"></a></td>
+                    <td><a href="https://mail.google.com"><img id="map" width="60" height="60" src="gmail.png"></a></td>
+                </tr>
+                <tr>
+                    <td><a href="https://ru.wikipedia.org/wiki/"><img id="map" width="60" height="60"
+                        src="wikipedia.jpg"></a></td>
+                        <td><a href="https://gdz.ru/"><img id="map" width="60" height="60" src="gdz.png"></a></td>
+                        <td><a href="https://www.viber.com/ru/"><img id="map" width="60" height="60" src="viber.png"></a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.google.com.ua/"><img id="map" width="60" height="60" src="google.jpg"></a></td>
+                <td><a href="https://learn.javascript.ru/"><img id="map" width="60" height="60" src="js.jpg"></a></td>
+                <td><a href="http://blockchain.info/"><img id="map" width="60" height="60" src="bitcoin.png"></a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="modal-1-title">
+                        Выберите цвет сайта
+                    </h2>
+                </header>
+                <main class="modal__content" id="modal-1-content">
+                    <input class="color-picker" type="text">
+                </main>
+                <footer class="modal__footer">
+                    <button class="modal__btn" data-micromodal-close
+                    aria-label="Close this dialog window">Close</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+    <script>
+        var poisk = document.getElementById("poisk");
+
+        function Search() {
+            document.location.href = "https://www.google.com/search?q=" + gg.value;
+        }
+
+        MicroModal.init();
+        n.addEventListener("click", function () {
+            MicroModal.show('modal-1');
+        });
+
+
+        let colorPicker = document.querySelector(".color-picker");
+        let defaultColor = document.body.style.backgroundColor;
+        let cmodal = document.querySelector('.modal__container');
+
+        // Simple example, see optional options for more configuration.
+        const pickr = Pickr.create({
+            el: colorPicker,
+            default: defaultColor,
+            theme: 'nano', // or 'monolith', or 'nano'
+
+            swatches: [
+                'rgba(244, 67, 54, 1)',
+                'rgba(233, 30, 99, 0.95)',
+                'rgba(156, 39, 176, 0.9)',
+                'rgba(103, 58, 183, 0.85)',
+                'rgba(63, 81, 181, 0.8)',
+                'rgba(33, 150, 243, 0.75)',
+                'rgba(3, 169, 244, 0.7)',
+                'rgba(0, 188, 212, 0.7)',
+                'rgba(0, 150, 136, 0.75)',
+                'rgba(76, 175, 80, 0.8)',
+                'rgba(139, 195, 74, 0.85)',
+                'rgba(205, 220, 57, 0.9)',
+                'rgba(255, 235, 59, 0.95)',
+                'rgba(255, 193, 7, 1)'
+            ],
+
+            components: {
+
+                // Main components
+                preview: true,
+                opacity: true,
+                hue: true,
+
+                // Input / output Options
+                interaction: {
+                    hex: true,
+                    rgba: true,
+                    input: true,
+                    clear: true,
+                    save: true
+                }
+            }
+        }).on('init', pickr => {
+            switchModalColor();
+        }).on('save', color => {
+            let colorFild = color.toRGBA().toString(0);
+            localStorage.setItem("bgcolor",colorFild);
+            document.body.style.backgroundColor = colorFild;
+            colorPicker.value = colorFild;
+            pickr.hide();
+            switchModalColor();
+        });
+
+        function switchModalColor() {
+            let curentColor = pickr.getColor().toHEXA().toString();
+            if (curentColor == "#FFFFFF") {
+                cmodal.style.backgroundColor = "#000000"
+            } else {
+                cmodal.style.backgroundColor = "#FFFFFF"
+            }
+        }
+    </script>
+
+</body>
+
+</html>

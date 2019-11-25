@@ -1,8 +1,10 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var gg = 0;
+var badGame = false;
+var animationTime = 100;
 var blockSize = 10;
-var width, height, gg, k, f;
+var width, height, k, f;
 if (window.innerWidth > 1400) {
     k = 0.8;
 } else {
@@ -35,7 +37,7 @@ var drawScore = function () {
     ctx.fillText("Счет: " + score, blockSize, blockSize);
 };
 var gameOver = function () {
-    clearInterval(intervalId);
+    badGame = true;
     ctx.font = f + "px Comic Sans MS";
     ctx.fillStyle = "Black";
     ctx.textAlign = "center";
@@ -159,14 +161,21 @@ Apple.prototype.move = function () {
 };
 var snake = new Snake();
 var apple = new Apple();
-var intervalId = setInterval(function () {
+var gameLoop = function () {
+    if(badGame){
+        return;
+    }
     ctx.clearRect(0, 0, width, height);
     drawScore();
     snake.move();
     snake.draw();
     apple.draw();
     drawBorder();
-}, 100);
+    setTimeout(gameLoop, animationTime);
+    // if(badGame){
+    //     return;
+    // }
+};
 var directions = {
     37: "left",
     38: "up",
@@ -182,3 +191,4 @@ $("body").keydown(function (event) {
 $("button").on("click touch", function () {
     snake.setDirection($(this).data('direction'));
 });
+gameLoop();
